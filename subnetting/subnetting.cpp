@@ -219,6 +219,41 @@ string get_subnet_mask_for_sh(string str_addr, int num_subs, int num_hosts) {
   return get_mask_for_p(P);
 }
 
+int get_num_hosts() {
+  string nh;
+  cout << "Enter number of hosts: " << endl;
+  cin >> nh;
+  return stoi(nh);
+}
+
+int get_num_subs() {
+  string ns;
+  cout << "Enter number of subs: " << endl;
+  cin >> ns;
+  return stoi(ns);
+}
+
+string get_cidr() {
+  string cidr;
+  cout << "Enter cidr: " << endl;
+  cin >> cidr;
+  return cidr;
+}
+
+string get_str_mask() {
+  string str_mask;
+  cout << "Enter str_mask: " << endl;
+  cin >> str_mask;
+  return str_mask;
+}
+
+string get_str_addr() {
+  string str_addr;
+  cout << "Enter str_addr: " << endl;
+  cin >> str_addr;
+  return str_addr;
+}
+
 int main() {
 
   uint32_t addr;
@@ -232,7 +267,7 @@ int main() {
   int num_subs;
   int num_hosts;
 
-  str_addr = "192.168.221.0";
+  str_addr = "172.18.217.9";
   str_mask = "255.255.255.192";
 
   cidr = "10.0.0.0/20";
@@ -240,23 +275,78 @@ int main() {
   num_subs = 50;
   num_hosts = 600;
 
-  // auto Ans1 = get_subnet(str_addr, str_mask);
-  // auto Ans1 = get_subnet_from_cidr(str_addr);
-  // auto Ans1 = get_broadcast_addr(str_addr, str_mask);
-  // auto Ans1 = get_broadcast_addr_from_cidr(cidr);
-  // auto Ans1 = get_first_valid_host(str_addr, str_mask);
-  // auto Ans1 = get_last_valid_host(str_addr, str_mask);
-  // auto Ans1 = get_subnet_from_host(str_addr);
-  // auto Ans1 = get_valid_host_range(str_addr);
-  auto Ans1 = how_many_subnets(str_addr, str_mask);
-  auto Ans2 = how_many_hosts(str_mask);
-  // auto Ans1 = how_many_subnets_from_cidr(cidr);
-  // auto Ans2 = how_many_hosts_from_cidr(cidr);
-  // auto Ans1 = get_subnet_mask_for_sh(str_addr, num_subs, num_hosts);
-
+  int select_question;
+  cout << "Select question from following:" << endl;
+  cout << "  1) get_subnet(str_addr, str_mask)" << endl;
+  cout << "  2) get_subnet_from_cidr(cidr)" << endl;
+  cout << "  3) get_broadcast_addr(str_addr, str_mask)" << endl;
+  cout << "  4) get_broadcast_addr_from_cidr(cidr)" << endl;
+  cout << "  5) get_first_valid_host(str_addr, str_mask)" << endl;
+  cout << "  6) get_last_valid_host(str_addr, str_mask)" << endl;
+  cout << "  7) -NA-" << endl;
+  cout << "  8) get_valid_host_range(str_addr)" << endl;
+  cout << "  9) how_many_subnets(str_addr, str_mask)" << endl;
+  cout << "  10) how_many_hosts(str_mask)" << endl;
+  cout << "  11) how_many_subnets_from_cidr(cidr)" << endl;
+  cout << "  12) how_many_hosts_from_cidr(cidr)" << endl;
+  cout << "  13) get_subnet_mask_for_sh(str_addr, num_subs, num_hosts)" << endl;
   cout << endl;
-  cout << "Ans1: " << Ans1 << endl;
-  cout << "Ans2: " << Ans2 << endl;
+
+  cin >> select_question;
+
+  switch (select_question) {
+  case 1:
+    cout << "Answer is: " << get_subnet(get_str_addr(), get_str_mask()) << endl;
+    break;
+  case 2:
+    cout << "Answer is: " << get_subnet_from_cidr(str_addr) << endl;
+    break;
+  case 3:
+    cout << "Answer is: " << get_broadcast_addr(get_str_addr(), get_str_mask())
+         << endl;
+    break;
+  case 4:
+    cout << "Answer is: " << get_broadcast_addr_from_cidr(get_cidr()) << endl;
+    break;
+  case 5:
+    cout << "Answer is: "
+         << get_first_valid_host(get_str_addr(), get_str_mask()) << endl;
+    break;
+  case 6:
+    cout << "Answer is: " << get_last_valid_host(get_str_addr(), get_str_mask())
+         << endl;
+    break;
+  // case 7:
+  //   cout << "Answer is: "
+  //        << "-NA-" << endl;
+  //   break;
+  case 8:
+    cout << "Answer is: " << get_valid_host_range(get_str_addr()) << endl;
+    break;
+  case 9:
+    cout << "Answer is: " << how_many_subnets(get_str_addr(), get_str_mask())
+         << endl;
+    break;
+  case 10:
+    cout << "Answer is: " << how_many_hosts(get_str_mask()) << endl;
+    break;
+  case 11:
+    cout << "Answer is: " << how_many_subnets_from_cidr(get_cidr()) << endl;
+    break;
+  case 12:
+    cout << "Answer is: " << how_many_hosts_from_cidr(get_cidr()) << endl;
+    break;
+  case 13:
+    cout << "Answer is: "
+         << get_subnet_mask_for_sh(get_str_addr(), get_num_subs(),
+                                   get_num_hosts())
+         << endl;
+    break;
+
+  default:
+    cout << "Invalid selection '" << select_question << "' provided." << endl;
+    break;
+  }
 
   return 0;
 }
