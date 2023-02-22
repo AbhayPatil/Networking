@@ -51,12 +51,12 @@ string get_subnet(string str_addr, string str_mask) {
   auto mask = get_uint_version(str_mask);
   auto subnet = addr & mask;
   auto str_subnet = get_string_version(subnet);
-  cout << "GSubnet: str_addr: " << str_addr << endl;
-  cout << "GSubnet: str_mask: " << str_mask << endl;
-  cout << "GSubnet: subnet: " << str_subnet << endl;
-  cout << "GSubnet: addr: " << addr << endl;
-  cout << "GSubnet: uint subnet: " << std::hex << subnet << endl;
-  cout << "GSubnet: mask: " << mask << endl;
+  // cout << "GSubnet: str_addr: " << str_addr << endl;
+  // cout << "GSubnet: str_mask: " << str_mask << endl;
+  // cout << "GSubnet: subnet: " << str_subnet << endl;
+  // cout << "GSubnet: addr: " << addr << endl;
+  // cout << "GSubnet: uint subnet: " << std::hex << subnet << endl;
+  // cout << "GSubnet: mask: " << mask << endl;
   return str_subnet;
 }
 
@@ -65,9 +65,10 @@ string get_broadcast_addr(string str_addr, string str_mask) {
   auto subnet_uint = get_uint_version(subnet);
   auto mask_uint = get_uint_version(str_mask);
   auto broadcast_addr = subnet_uint | (~mask_uint);
-  cout << "GBA: subnet_uint: " << std::hex << subnet_uint << endl;
-  cout << "GBA: mask_uint: " << std::hex << mask_uint << endl;
-  cout << "GBA broadcast_addr: " << get_string_version(broadcast_addr) << endl;
+  // cout << "GBA: subnet_uint: " << std::hex << subnet_uint << endl;
+  // cout << "GBA: mask_uint: " << std::hex << mask_uint << endl;
+  // cout << "GBA broadcast_addr: " << get_string_version(broadcast_addr) <<
+  // endl;
   return get_string_version(broadcast_addr);
 }
 
@@ -96,7 +97,7 @@ string get_broadcast_addr_from_cidr(string cidr) {
 
 string get_first_valid_host(string str_addr, string str_mask) {
   auto subnet = get_subnet(str_addr, str_mask);
-  cout << "GFVH: subnet: " << subnet << endl;
+  // cout << "GFVH: subnet: " << subnet << endl;
   auto first_valid_host = get_uint_version(subnet) + 1;
   return get_string_version(first_valid_host);
 }
@@ -104,7 +105,7 @@ string get_first_valid_host(string str_addr, string str_mask) {
 string get_last_valid_host(string str_addr, string str_mask) {
   auto broadcast_addr = get_broadcast_addr(str_addr, str_mask);
   auto last_valid_host = get_uint_version(broadcast_addr) - 1;
-  cout << "GLVH: broadcast_addr: " << broadcast_addr << endl;
+  // cout << "GLVH: broadcast_addr: " << broadcast_addr << endl;
   return get_string_version(last_valid_host);
 }
 
@@ -138,7 +139,7 @@ string get_subnet_from_cidr(string cidr) {
 char get_class(string addr) {
   auto pos = addr.find(".");
   auto first_octet = stoi(addr.substr(0, pos));
-  cout << "GC: first_octet: " << first_octet << endl;
+  // cout << "GC: first_octet: " << first_octet << endl;
   if (first_octet < 128)
     return 'A';
   if (first_octet < 192)
@@ -170,8 +171,8 @@ int get_p_from_str_mask(string str_mask) {
 int how_many_subnets(string str_addr, string str_mask) {
   auto N = get_network_bits_from_class(get_class(str_addr));
   auto P = get_p_from_str_mask(str_mask);
-  cout << "HMS: N:" << N << endl;
-  cout << "HMS: P:" << P << endl;
+  // cout << "HMS: N:" << N << endl;
+  // cout << "HMS: P:" << P << endl;
   return pow(2, P - N);
 }
 
@@ -195,8 +196,8 @@ FL get_valid_host_range(string cidr) {
   auto str_addr = get_str_addr_from_cidr(cidr);
   auto str_mask = get_str_mask_from_cidr(cidr);
 
-  cout << "GVHR: str_addr: " << str_addr << endl;
-  cout << "GVHR: str_mask: " << str_mask << endl;
+  // cout << "GVHR: str_addr: " << str_addr << endl;
+  // cout << "GVHR: str_mask: " << str_mask << endl;
 
   FL fl = {get_first_valid_host(str_addr, str_mask),
            get_last_valid_host(str_addr, str_mask)};
@@ -256,24 +257,6 @@ string get_str_addr() {
 
 int main() {
 
-  uint32_t addr;
-  string str_addr;
-
-  uint32_t mask;
-  string str_mask;
-
-  string cidr;
-
-  int num_subs;
-  int num_hosts;
-
-  str_addr = "172.18.217.9";
-  str_mask = "255.255.255.192";
-
-  cidr = "10.0.0.0/20";
-
-  num_subs = 50;
-  num_hosts = 600;
 
   int select_question;
   cout << "Select question from following:" << endl;
@@ -293,60 +276,88 @@ int main() {
   cout << endl;
 
   cin >> select_question;
+  cout << endl;
 
   switch (select_question) {
-  case 1:
-    cout << "Answer is: " << get_subnet(get_str_addr(), get_str_mask()) << endl;
+  case 1: {
+    auto str_addr = get_str_addr();
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << get_subnet(str_addr, str_mask) << endl;
     break;
-  case 2:
-    cout << "Answer is: " << get_subnet_from_cidr(str_addr) << endl;
+  }
+  case 2: {
+    auto str_addr = get_str_addr();
+    cout << "\nAnswer is: " << get_subnet_from_cidr(str_addr) << endl;
     break;
-  case 3:
-    cout << "Answer is: " << get_broadcast_addr(get_str_addr(), get_str_mask())
-         << endl;
+  }
+  case 3: {
+    auto str_addr = get_str_addr();
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << get_broadcast_addr(str_addr, str_mask) << endl;
     break;
-  case 4:
-    cout << "Answer is: " << get_broadcast_addr_from_cidr(get_cidr()) << endl;
+  }
+  case 4: {
+    auto cidr = get_cidr();
+    cout << "\nAnswer is: " << get_broadcast_addr_from_cidr(cidr) << endl;
     break;
-  case 5:
-    cout << "Answer is: "
-         << get_first_valid_host(get_str_addr(), get_str_mask()) << endl;
+  }
+  case 5: {
+    auto str_addr = get_str_addr();
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << get_first_valid_host(str_addr, str_mask) << endl;
     break;
-  case 6:
-    cout << "Answer is: " << get_last_valid_host(get_str_addr(), get_str_mask())
-         << endl;
+  }
+  case 6: {
+    auto str_addr = get_str_addr();
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << get_last_valid_host(str_addr, str_mask) << endl;
     break;
+  }
   // case 7:
-  //   cout << "Answer is: "
+  //   cout << "\nAnswer is: "
   //        << "-NA-" << endl;
   //   break;
-  case 8:
-    cout << "Answer is: " << get_valid_host_range(get_str_addr()) << endl;
+  case 8: {
+    auto str_addr = get_str_addr();
+    cout << "\nAnswer is: " << get_valid_host_range(str_addr) << endl;
     break;
-  case 9:
-    cout << "Answer is: " << how_many_subnets(get_str_addr(), get_str_mask())
-         << endl;
+  }
+  case 9: {
+    auto str_addr = get_str_addr();
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << how_many_subnets(str_addr, str_mask) << endl;
     break;
-  case 10:
-    cout << "Answer is: " << how_many_hosts(get_str_mask()) << endl;
+  }
+  case 10: {
+    auto str_mask = get_str_mask();
+    cout << "\nAnswer is: " << how_many_hosts(str_mask) << endl;
     break;
-  case 11:
-    cout << "Answer is: " << how_many_subnets_from_cidr(get_cidr()) << endl;
+  }
+  case 11: {
+    auto cidr = get_cidr();
+    cout << "\nAnswer is: " << how_many_subnets_from_cidr(cidr) << endl;
     break;
-  case 12:
-    cout << "Answer is: " << how_many_hosts_from_cidr(get_cidr()) << endl;
+  }
+  case 12: {
+    auto cidr = get_cidr();
+    cout << "\nAnswer is: " << how_many_hosts_from_cidr(cidr) << endl;
     break;
-  case 13:
-    cout << "Answer is: "
-         << get_subnet_mask_for_sh(get_str_addr(), get_num_subs(),
-                                   get_num_hosts())
-         << endl;
-    break;
-
-  default:
-    cout << "Invalid selection '" << select_question << "' provided." << endl;
+  }
+  case 13: {
+    auto str_addr = get_str_addr();
+    auto num_subs = get_num_subs();
+    auto num_hosts = get_num_hosts();
+    cout << "\nAnswer is: "
+         << get_subnet_mask_for_sh(str_addr, num_subs, num_hosts) << endl;
     break;
   }
 
+  default: {
+    cout << "Invalid selection '" << select_question << "' provided." << endl;
+    break;
+  }
+  }
+
+  cout << endl;
   return 0;
 }
