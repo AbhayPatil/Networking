@@ -51,12 +51,6 @@ string get_subnet(string str_addr, string str_mask) {
   auto mask = get_uint_version(str_mask);
   auto subnet = addr & mask;
   auto str_subnet = get_string_version(subnet);
-  // cout << "GSubnet: str_addr: " << str_addr << endl;
-  // cout << "GSubnet: str_mask: " << str_mask << endl;
-  // cout << "GSubnet: subnet: " << str_subnet << endl;
-  // cout << "GSubnet: addr: " << addr << endl;
-  // cout << "GSubnet: uint subnet: " << std::hex << subnet << endl;
-  // cout << "GSubnet: mask: " << mask << endl;
   return str_subnet;
 }
 
@@ -65,10 +59,6 @@ string get_broadcast_addr(string str_addr, string str_mask) {
   auto subnet_uint = get_uint_version(subnet);
   auto mask_uint = get_uint_version(str_mask);
   auto broadcast_addr = subnet_uint | (~mask_uint);
-  // cout << "GBA: subnet_uint: " << std::hex << subnet_uint << endl;
-  // cout << "GBA: mask_uint: " << std::hex << mask_uint << endl;
-  // cout << "GBA broadcast_addr: " << get_string_version(broadcast_addr) <<
-  // endl;
   return get_string_version(broadcast_addr);
 }
 
@@ -97,7 +87,6 @@ string get_broadcast_addr_from_cidr(string cidr) {
 
 string get_first_valid_host(string str_addr, string str_mask) {
   auto subnet = get_subnet(str_addr, str_mask);
-  // cout << "GFVH: subnet: " << subnet << endl;
   auto first_valid_host = get_uint_version(subnet) + 1;
   return get_string_version(first_valid_host);
 }
@@ -105,7 +94,6 @@ string get_first_valid_host(string str_addr, string str_mask) {
 string get_last_valid_host(string str_addr, string str_mask) {
   auto broadcast_addr = get_broadcast_addr(str_addr, str_mask);
   auto last_valid_host = get_uint_version(broadcast_addr) - 1;
-  // cout << "GLVH: broadcast_addr: " << broadcast_addr << endl;
   return get_string_version(last_valid_host);
 }
 
@@ -139,7 +127,6 @@ string get_subnet_from_cidr(string cidr) {
 char get_class(string addr) {
   auto pos = addr.find(".");
   auto first_octet = stoi(addr.substr(0, pos));
-  // cout << "GC: first_octet: " << first_octet << endl;
   if (first_octet < 128)
     return 'A';
   if (first_octet < 192)
@@ -171,8 +158,6 @@ int get_p_from_str_mask(string str_mask) {
 int how_many_subnets(string str_addr, string str_mask) {
   auto N = get_network_bits_from_class(get_class(str_addr));
   auto P = get_p_from_str_mask(str_mask);
-  // cout << "HMS: N:" << N << endl;
-  // cout << "HMS: P:" << P << endl;
   return pow(2, P - N);
 }
 
@@ -195,10 +180,6 @@ struct FL {
 FL get_valid_host_range(string cidr) {
   auto str_addr = get_str_addr_from_cidr(cidr);
   auto str_mask = get_str_mask_from_cidr(cidr);
-
-  // cout << "GVHR: str_addr: " << str_addr << endl;
-  // cout << "GVHR: str_mask: " << str_mask << endl;
-
   FL fl = {get_first_valid_host(str_addr, str_mask),
            get_last_valid_host(str_addr, str_mask)};
 
@@ -313,10 +294,9 @@ int main() {
     cout << "\nAnswer is: " << get_last_valid_host(str_addr, str_mask) << endl;
     break;
   }
+
   // case 7:
-  //   cout << "\nAnswer is: "
-  //        << "-NA-" << endl;
-  //   break;
+
   case 8: {
     auto str_addr = get_str_addr();
     cout << "\nAnswer is: " << get_valid_host_range(str_addr) << endl;
