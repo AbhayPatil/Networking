@@ -4,6 +4,17 @@
 /*
  * This file contains very easy to understand algorithms
  * that deal with subnetting.
+ *
+ * Notation:
+ *
+ *   a. addr = 10.20.30.40 (represented in uint32_t)
+ *   b. str_addr = "10.20.30.40"
+ *   c. mask = 225.255.0.0 (represented in uint32_t)
+ *   d. str_mask = "255.255.0.0"
+ *   e. cidr = "10.20.30.40/16"
+ *   e. cidr_mask = P = 16 (int)
+ *   f. str_cidr_mask = "16"
+ *   g. host_bits = H = 32 - P
  */
 
 using namespace std;
@@ -100,7 +111,7 @@ string get_last_valid_host(string str_addr, string str_mask) {
 int how_many_host_bits(string str_mask) {
   int host_bits = 0;
   auto mask = get_uint_version(str_mask);
-  while( ((mask>>host_bits) & 0x1) == false) {
+  while (((mask >> host_bits) & 0x1) == false) {
     host_bits++;
   }
   return host_bits;
@@ -113,8 +124,8 @@ int how_many_hosts(string str_mask) {
 
 int how_many_hosts_from_cidr(string cidr) {
   auto pos = cidr.find("/");
-  auto str_mask_num = cidr.substr(pos + 1);
-  auto P = stoi(str_mask_num);
+  auto str_cidr_mask = cidr.substr(pos + 1);
+  auto P = stoi(str_cidr_mask);
   return pow(2, 32 - P) - 2;
 }
 
@@ -147,9 +158,13 @@ int get_network_bits_from_class(char cl) {
   return 32;
 }
 
+int get_network_bits_from_str_addr(string str_addr) {
+  return get_network_bits_from_class(get_class(str_addr));
+}
+
 int get_p_from_str_mask(string str_mask) {
   auto host_bits = how_many_host_bits(str_mask);
-  return 32-host_bits;
+  return 32 - host_bits;
 }
 
 int how_many_subnets(string str_addr, string str_mask) {
@@ -213,7 +228,7 @@ int main() {
   string str_mask;
 
   string cidr;
- 
+
   int num_subs;
   int num_hosts;
 
@@ -221,7 +236,7 @@ int main() {
   str_mask = "255.255.255.192";
 
   cidr = "10.0.0.0/20";
-  
+
   num_subs = 50;
   num_hosts = 600;
 
