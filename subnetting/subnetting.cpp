@@ -238,7 +238,6 @@ string get_str_addr() {
 
 int main() {
 
-
   int select_question;
   cout << "Select question from following:" << endl;
   cout << "  1) get_subnet(str_addr, str_mask)" << endl;
@@ -295,7 +294,7 @@ int main() {
     break;
   }
 
-  // case 7:
+    // case 7:
 
   case 8: {
     auto str_addr = get_str_addr();
