@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <math.h>
 
@@ -35,8 +36,8 @@ uint32_t get_uint_version(string str) {
 
   do {
     it = str.find(".", prev_it + 1);
-    auto block_str = str.substr(prev_it, it - prev_it);
-    uint32_t block_int = stoi(block_str);
+    auto str_octet = str.substr(prev_it, it - prev_it);
+    uint32_t block_int = stoi(str_octet);
     if (block_int > 255)
       return -1;
     addr |= ((block_int) << (shift * 8));
@@ -158,7 +159,8 @@ int get_p_from_str_mask(string str_mask) {
 int how_many_subnets(string str_addr, string str_mask) {
   auto N = get_network_bits_from_class(get_class(str_addr));
   auto P = get_p_from_str_mask(str_mask);
-  return pow(2, P - N);
+  auto num_subnet_bits = P - N;
+  return pow(2, num_subnet_bits);
 }
 
 int how_many_subnets_from_cidr(string cidr) {
@@ -186,52 +188,48 @@ FL get_valid_host_range(string cidr) {
   return fl;
 }
 
-int get_subnet_bits_from_subnets(int subnets) {
-  int bits = 0;
-  while (pow(2, bits) < subnets) {
-    bits++;
-  }
-  return bits;
+int how_many_subnet_bits_required(int num_subnets) {
+  return ceil(log2(num_subnets));
 }
 
 string get_subnet_mask_for_sh(string str_addr, int num_subs, int num_hosts) {
   int N = get_network_bits_from_class(get_class(str_addr));
-  int subnet_bits = get_subnet_bits_from_subnets(num_subs);
+  int subnet_bits = how_many_subnet_bits_required(num_subs);
   int P = N + subnet_bits;
   return get_mask_for_p(P);
 }
 
 int get_num_hosts() {
   string nh;
-  cout << "Enter number of hosts: " << endl;
+  cout << "Enter number of hosts: ";
   cin >> nh;
   return stoi(nh);
 }
 
 int get_num_subs() {
   string ns;
-  cout << "Enter number of subs: " << endl;
+  cout << "Enter number of subs: ";
   cin >> ns;
   return stoi(ns);
 }
 
 string get_cidr() {
   string cidr;
-  cout << "Enter cidr: " << endl;
+  cout << "Enter cidr (eg: 10.20.30.40/16): ";
   cin >> cidr;
   return cidr;
 }
 
 string get_str_mask() {
   string str_mask;
-  cout << "Enter str_mask: " << endl;
+  cout << "Enter mask (eg: 225.255.0.0): ";
   cin >> str_mask;
   return str_mask;
 }
 
 string get_str_addr() {
   string str_addr;
-  cout << "Enter str_addr: " << endl;
+  cout << "Enter addr (eg. 10.20.30.40): ";
   cin >> str_addr;
   return str_addr;
 }
@@ -239,21 +237,22 @@ string get_str_addr() {
 int main() {
 
   int select_question;
-  cout << "Select question from following:" << endl;
-  cout << "  1) get_subnet(str_addr, str_mask)" << endl;
-  cout << "  2) get_subnet_from_cidr(cidr)" << endl;
-  cout << "  3) get_broadcast_addr(str_addr, str_mask)" << endl;
-  cout << "  4) get_broadcast_addr_from_cidr(cidr)" << endl;
-  cout << "  5) get_first_valid_host(str_addr, str_mask)" << endl;
-  cout << "  6) get_last_valid_host(str_addr, str_mask)" << endl;
-  cout << "  7) -NA-" << endl;
-  cout << "  8) get_valid_host_range(str_addr)" << endl;
-  cout << "  9) how_many_subnets(str_addr, str_mask)" << endl;
+  cout << "\nSelect question from following:\n" << endl;
+  cout << "   1) get_subnet(str_addr, str_mask)" << endl;
+  cout << "   2) get_subnet_from_cidr(cidr)" << endl;
+  cout << "   3) get_broadcast_addr(str_addr, str_mask)" << endl;
+  cout << "   4) get_broadcast_addr_from_cidr(cidr)" << endl;
+  cout << "   5) get_first_valid_host(str_addr, str_mask)" << endl;
+  cout << "   6) get_last_valid_host(str_addr, str_mask)" << endl;
+  cout << "   7) -NA-" << endl;
+  cout << "   8) get_valid_host_range(str_cidr)" << endl;
+  cout << "   9) how_many_subnets(str_addr, str_mask)" << endl;
   cout << "  10) how_many_hosts(str_mask)" << endl;
   cout << "  11) how_many_subnets_from_cidr(cidr)" << endl;
   cout << "  12) how_many_hosts_from_cidr(cidr)" << endl;
   cout << "  13) get_subnet_mask_for_sh(str_addr, num_subs, num_hosts)" << endl;
   cout << endl;
+  cout << "Enter question: ";
 
   cin >> select_question;
   cout << endl;
@@ -297,8 +296,8 @@ int main() {
     // case 7:
 
   case 8: {
-    auto str_addr = get_str_addr();
-    cout << "\nAnswer is: " << get_valid_host_range(str_addr) << endl;
+    auto cidr = get_cidr();
+    cout << "\nAnswer is: " << get_valid_host_range(cidr) << endl;
     break;
   }
   case 9: {
