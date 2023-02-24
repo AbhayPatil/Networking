@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <math.h>
+#include <sstream>
 
 /*
  * This file contains very easy to understand algorithms
@@ -20,7 +21,7 @@
  * Usage:
  *
  *   $ g++ subnetting.cpp -o subnet && ./subnet
- *  
+ *
  */
 
 using namespace std;
@@ -34,21 +35,16 @@ string get_string_version(uint32_t addr) {
 }
 
 uint32_t get_uint_version(string str) {
-  uint32_t addr = 0;
-  size_t it = 0;
-  size_t prev_it = it;
-  int shift = 3;
+  stringstream ss(str);
+  uint32_t octet[4];
+  char dot;
+  ss >> octet[3] >> dot >> octet[2] >> dot >> octet[1] >> dot >> octet[0];
 
-  do {
-    it = str.find(".", prev_it + 1);
-    auto str_octet = str.substr(prev_it, it - prev_it);
-    uint32_t block_int = stoi(str_octet);
-    if (block_int > 255)
-      return -1;
-    addr |= ((block_int) << (shift * 8));
-    shift--;
-    prev_it = it + 1;
-  } while (it != string::npos);
+  uint32_t addr = 0;
+  for (int i = 0; i < 4; i++) {
+    addr |= (octet[i] << (i * 8));
+  }
+
   return addr;
 }
 
