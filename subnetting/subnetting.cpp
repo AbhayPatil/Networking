@@ -16,6 +16,11 @@
  *   e. cidr_mask = P = 16 (int)
  *   f. str_cidr_mask = "16"
  *   g. host_bits = H = 32 - P
+ *
+ * Usage:
+ *
+ *   $ g++ subnetting.cpp -o subnet && ./subnet
+ *  
  */
 
 using namespace std;
