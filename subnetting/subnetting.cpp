@@ -22,6 +22,10 @@
  *
  *   $ g++ subnetting.cpp -o subnet && ./subnet
  *
+ * Verified using tests generated from:
+ *
+ *   http://www.subnettingquestions.com/
+ *
  */
 
 using namespace std;
@@ -44,7 +48,6 @@ uint32_t get_uint_version(string str) {
   for (int i = 0; i < 4; i++) {
     addr |= (octet[i] << (i * 8));
   }
-
   return addr;
 }
 
